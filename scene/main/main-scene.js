@@ -1,7 +1,43 @@
+class Player extends GuaImage {
+    constructor(game) {
+        super('player', game)
+        this.setup()
+    }
+    setup() {
+        this.w *= 0.4
+        this.h *= 0.4
+        this.x = 100
+        this.y = 350
+        this.speed = 10
+    }
+
+    moveUp() {
+        this.y -= this.speed
+    }
+    moveDown() {
+        this.y += this.speed
+    }
+    moveLeft() {
+        this.x -= this.speed
+    }
+    moveRight() {
+        this.x += this.speed
+    }
+
+    draw() {
+
+    }
+
+    update() {
+
+    }
+}
+
 class Scene extends BaseScene {
     constructor(game, blocks) {
         super(game)
         this.setup()
+        this.setupEvents()
     }
 
     setup() {
@@ -9,17 +45,29 @@ class Scene extends BaseScene {
         this.sky.w = 400
         this.sky.h = 400
 
-        this.player = new GuaImage('player', this.game)
-        this.player.w *= 0.4
-        this.player.h *= 0.4
-        this.player.x = 100
-        this.player.y = 350
+        this.player = new Player(this.game)
 
         this.cloud = new GuaImage('cloud', this.game)
         this.cloud.w *= 0.5
         this.cloud.h *= 0.5
 
         this.addElemets([this.sky, this.player, this.cloud])
+    }
+
+    setupEvents() {
+        var game = this.game
+        game.registerAction('a', () => {
+            this.player.moveLeft()
+        })
+        game.registerAction('d', () => {
+            this.player.moveRight()
+        })
+        game.registerAction('s', () => {
+            this.player.moveDown()
+        })
+        game.registerAction('w', () => {
+            this.player.moveUp()
+        })
     }
 
     update() {
