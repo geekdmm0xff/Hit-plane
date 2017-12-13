@@ -63,14 +63,9 @@ class Game {
         this.scene = scene
     }
 
-    imageByName(name) {
-        var image = this.images[name]
-        var o = {
-            image: image,
-            w: image.width,
-            h: image.height,
-        }
-        return o
+    textureByName(name) {
+        var img = this.images[name]
+        return img
     }
 
     // event
@@ -86,7 +81,7 @@ class Game {
     }
 
     drawImage(obj) {
-        this.context.drawImage(obj.image, obj.x, obj.y)
+        this.context.drawImage(obj.texture, obj.x, obj.y, obj.w, obj.h)
     }
 
     drawText() {
@@ -120,6 +115,7 @@ class Game {
         // clear before
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
         // draw
+
         this.scene.draw()
 
         setTimeout(() => {

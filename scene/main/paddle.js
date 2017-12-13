@@ -1,3 +1,4 @@
+
 var Paddle = function (game) {
     var o = game.imageByName('paddle')
     o.x = 200

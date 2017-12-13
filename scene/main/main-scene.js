@@ -1,6 +1,35 @@
 class Scene extends BaseScene {
     constructor(game, blocks) {
         super(game)
+        this.setup()
+    }
+
+    setup() {
+        this.sky = new GuaImage('sky', this.game)
+        this.sky.w = 400
+        this.sky.h = 400
+
+        this.player = new GuaImage('player', this.game)
+        this.player.w *= 0.4
+        this.player.h *= 0.4
+        this.player.x = 100
+        this.player.y = 350
+
+        this.cloud = new GuaImage('cloud', this.game)
+        this.cloud.w *= 0.5
+        this.cloud.h *= 0.5
+
+        this.addElemets([this.sky, this.player, this.cloud])
+    }
+
+    update() {
+        this.cloud.y += 1
+    }
+}
+/*
+class Scene extends BaseScene {
+    constructor(game, blocks) {
+        super(game)
         //
         this.paddle = Paddle(game)
         this.ball = Ball(game)
@@ -124,3 +153,4 @@ class Scene extends BaseScene {
         }
     }
 }
+*/
