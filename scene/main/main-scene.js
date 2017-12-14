@@ -1,4 +1,12 @@
 //[start, end]
+var config = {
+    player_speed: 10,
+    bullet_speed: 20,
+    enemy_speed: 2,
+    cloud_speed: 1,
+    cooldown_time: 5,
+}
+
 const random = function (start, end) {
     var n = Math.random() * (end - start + 1) + start
     return Math.floor(n)
@@ -15,7 +23,7 @@ class Bullet extends GuaImage {
         this.x = player.x + player.w * 0.1
         this.y = player.y
         this.player = player
-        this.speed = 20
+        this.speed = config.bullet_speed
     }
 
     move() {
@@ -24,6 +32,10 @@ class Bullet extends GuaImage {
 
     update() {
         this.move()
+    }
+
+    debug() {
+        this.speed = config.bullet_speed
     }
 }
 
@@ -36,7 +48,7 @@ class Enemy extends GuaImage {
     setup() {
         this.x = random(0, 400)
         this.y = -random(0, 250)
-        this.speed = 2
+        this.speed = config.enemy_speed
     }
 
     move() {
@@ -50,6 +62,10 @@ class Enemy extends GuaImage {
         super.update()
         this.move()
     }
+
+    debug() {
+        this.speed = config.enemy_speed
+    }
 }
 
 class Cloud extends GuaImage {
@@ -61,7 +77,7 @@ class Cloud extends GuaImage {
     }
 
     setup() {
-        this.speed = 1
+        this.speed = config.cloud_speed
         this.x = random(0, 100)
         this.y = -random(0, 100)
     }
@@ -76,6 +92,10 @@ class Cloud extends GuaImage {
     update() {
         this.move()
     }
+
+    debug() {
+        this.speed = config.cloud_speed
+    }
 }
 
 class Player extends GuaImage {
@@ -88,13 +108,13 @@ class Player extends GuaImage {
         this.h *= 0.4
         this.x = 100
         this.y = 350
-        this.speed = 10
+        this.speed = config.player_speed
         this.cooldwon = 0
     }
 
     fire() {
         if (this.cooldwon == 0) {
-            this.cooldwon = 5
+            this.cooldwon = config.cooldown_time
             var b = new Bullet(this.game, this)
             this.scene.addElemet(b)
         }
@@ -117,6 +137,10 @@ class Player extends GuaImage {
         if (this.cooldwon > 0) {
             this.cooldwon--;
         }
+    }
+
+    debug() {
+        this.speed = config.player_speed
     }
 }
 
@@ -147,8 +171,6 @@ class Scene extends BaseScene {
 
         this.addElemets([this.sky, this.player, this.cloud])
         this.addElemets(this.addEnemys())
-
-        log('list:', this.elems)
     }
 
     setupEvents() {

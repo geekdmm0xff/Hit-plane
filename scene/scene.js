@@ -1,21 +1,33 @@
 class BaseScene {
     constructor(game) {
         this.game = game
+        this.debugMode = true
         this.elems = []
     }
 
     draw() {
         for (var i = 0; i < this.elems.length; i++) {
             var elem = this.elems[i]
-             // this.game.drawImage(elem)
             elem.draw()
         }
     }
 
     update() {
+        this.debug()
+
         for (var i = 0; i < this.elems.length; i++) {
             var elem = this.elems[i]
             elem.update()
+        }
+    }
+
+    debug(){
+        if (!this.debugMode) {
+            return
+        }
+        for (var i = 0; i < this.elems.length; i++) {
+            var elem = this.elems[i]
+            elem.debug()
         }
     }
 

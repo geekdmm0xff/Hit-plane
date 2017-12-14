@@ -13,4 +13,8 @@ class GuaImage {
 
     update() {
     }
+
+    debug() {
+
+    }
 }
