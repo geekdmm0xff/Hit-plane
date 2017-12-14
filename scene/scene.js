@@ -27,7 +27,7 @@ class BaseScene {
         }
         for (var i = 0; i < this.elems.length; i++) {
             var elem = this.elems[i]
-            elem.debug()
+            elem.debug && elem.debug()
         }
     }
 
