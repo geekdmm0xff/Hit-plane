@@ -7,20 +7,23 @@ const random = function (start, end) {
 class Bullet extends GuaImage {
     constructor(game, player) {
         super('bullet', game)
-        this.player = player
-        this.setup()
+        this.setup(player)
     }
 
-    setup() {
-        var p = this.player
-        this.x = p.x + p.w * 0.1
-        this.y = p.y
-        this.speed = 1
+    setup(player) {
+        this.player = player
+        this.x = player.x + player.w * 0.1
+        this.y = player.y
+        this.player = player
+        this.speed = 20
+    }
+
+    move() {
+        this.y -= this.speed
     }
 
     update() {
-        this.y -= this.speed
-        super.update()
+        this.move()
     }
 }
 
@@ -52,6 +55,8 @@ class Enemy extends GuaImage {
 class Cloud extends GuaImage {
     constructor(game) {
         super('cloud', game)
+        this.w *= 0.5
+        this.h *= 0.5
         this.setup()
     }
 
@@ -70,7 +75,6 @@ class Cloud extends GuaImage {
 
     update() {
         this.move()
-        super.update()
     }
 }
 
@@ -85,11 +89,15 @@ class Player extends GuaImage {
         this.x = 100
         this.y = 350
         this.speed = 10
+        this.cooldwon = 0
     }
 
     fire() {
-        var b = new Bullet(this.game, this)
-        this.scene.addElemet(b)
+        if (this.cooldwon == 0) {
+            this.cooldwon = 5
+            var b = new Bullet(this.game, this)
+            this.scene.addElemet(b)
+        }
     }
 
     moveUp() {
@@ -103,6 +111,12 @@ class Player extends GuaImage {
     }
     moveRight() {
         this.x += this.speed
+    }
+
+    update() {
+        if (this.cooldwon > 0) {
+            this.cooldwon--;
+        }
     }
 }
 
@@ -128,13 +142,8 @@ class Scene extends BaseScene {
         this.numberOfEnemys = 10
 
         this.sky = new Sky(this.game)
-
         this.player = new Player(this.game)
-        this.player.scene = this
-
         this.cloud = new Cloud(this.game)
-        this.cloud.w *= 0.5
-        this.cloud.h *= 0.5
 
         this.addElemets([this.sky, this.player, this.cloud])
         this.addElemets(this.addEnemys())
