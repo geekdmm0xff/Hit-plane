@@ -7,6 +7,10 @@ var __main = function() {
         player: 'img/player.png',
         sky: 'img/sky.png',
         cloud: 'img/cloud.png',
+        bullet: 'img/bullet.png',
+        enemy0: 'img/enemy0.png',
+        enemy1: 'img/enemy1.png',
+        enemy2: 'img/enemy2.png',
     }
 
     var game = Game.instance(30, paths, function () { // image 加载完回调

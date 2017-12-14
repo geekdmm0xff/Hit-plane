@@ -1,3 +1,103 @@
+//[start, end]
+var config = {
+    player_speed: 10,
+    bullet_speed: 20,
+    enemy_speed: 2,
+    cloud_speed: 1,
+    cooldown_time: 5,
+}
+
+const random = function (start, end) {
+    var n = Math.random() * (end - start + 1) + start
+    return Math.floor(n)
+}
+
+class Bullet extends GuaImage {
+    constructor(game, player) {
+        super('bullet', game)
+        this.setup(player)
+    }
+
+    setup(player) {
+        this.player = player
+        this.x = player.x + player.w * 0.1
+        this.y = player.y
+        this.player = player
+        this.speed = config.bullet_speed
+    }
+
+    move() {
+        this.y -= this.speed
+    }
+
+    update() {
+        this.move()
+    }
+
+    debug() {
+        this.speed = config.bullet_speed
+    }
+}
+
+class Enemy extends GuaImage {
+    constructor(game) {
+        var name = 'enemy' + String(random(0, 2))
+        super(name, game)
+        this.setup()
+    }
+    setup() {
+        this.x = random(0, 400)
+        this.y = -random(0, 250)
+        this.speed = config.enemy_speed
+    }
+
+    move() {
+        if (this.y > 400) {
+            this.setup()
+        }
+        this.y += this.speed
+    }
+
+    update() {
+        super.update()
+        this.move()
+    }
+
+    debug() {
+        this.speed = config.enemy_speed
+    }
+}
+
+class Cloud extends GuaImage {
+    constructor(game) {
+        super('cloud', game)
+        this.w *= 0.5
+        this.h *= 0.5
+        this.setup()
+    }
+
+    setup() {
+        this.speed = config.cloud_speed
+        this.x = random(0, 100)
+        this.y = -random(0, 100)
+    }
+
+    move() {
+        if (this.y > 400) {
+            this.setup()
+        }
+        this.y += this.speed
+    }
+
+    update() {
+        this.move()
+    }
+
+    debug() {
+        this.speed = config.cloud_speed
+    }
+}
+
 class Player extends GuaImage {
     constructor(game) {
         super('player', game)
@@ -8,7 +108,16 @@ class Player extends GuaImage {
         this.h *= 0.4
         this.x = 100
         this.y = 350
-        this.speed = 10
+        this.speed = config.player_speed
+        this.cooldwon = 0
+    }
+
+    fire() {
+        if (this.cooldwon == 0) {
+            this.cooldwon = config.cooldown_time
+            var b = new Bullet(this.game, this)
+            this.scene.addElemet(b)
+        }
     }
 
     moveUp() {
@@ -24,34 +133,44 @@ class Player extends GuaImage {
         this.x += this.speed
     }
 
-    draw() {
-
+    update() {
+        if (this.cooldwon > 0) {
+            this.cooldwon--;
+        }
     }
 
-    update() {
+    debug() {
+        this.speed = config.player_speed
+    }
+}
 
+class Sky extends GuaImage {
+    constructor(game) {
+        super('sky', game)
+        this.setup()
+    }
+    setup() {
+        this.w = 400
+        this.h = 400
     }
 }
 
 class Scene extends BaseScene {
-    constructor(game, blocks) {
+    constructor(game) {
         super(game)
         this.setup()
         this.setupEvents()
     }
 
     setup() {
-        this.sky = new GuaImage('sky', this.game)
-        this.sky.w = 400
-        this.sky.h = 400
+        this.numberOfEnemys = 10
 
+        this.sky = new Sky(this.game)
         this.player = new Player(this.game)
-
-        this.cloud = new GuaImage('cloud', this.game)
-        this.cloud.w *= 0.5
-        this.cloud.h *= 0.5
+        this.cloud = new Cloud(this.game)
 
         this.addElemets([this.sky, this.player, this.cloud])
+        this.addElemets(this.addEnemys())
     }
 
     setupEvents() {
@@ -68,10 +187,19 @@ class Scene extends BaseScene {
         game.registerAction('w', () => {
             this.player.moveUp()
         })
+        game.registerAction('f', () => {
+            this.player.fire()
+        })
     }
 
-    update() {
-        this.cloud.y += 1
+    addEnemys() {
+        var es = []
+        for (var i = 0; i < this.numberOfEnemys; i++) {
+            var e = new Enemy(this.game)
+            es.push(e)
+        }
+        this.enemys = es
+        return this.enemys
     }
 }
 /*

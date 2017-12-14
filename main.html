@@ -30,12 +30,56 @@
 <body>
     <canvas id="id-canvas" width="400" height="400"></canvas>
     <div>
-        <label>FPS:</label>
-        <input id="id-speed-input" type="range" min="1">
-        <span id="id-speed-span">50</span>
+        <input class="auto-input" data-code="config.player_speed" type="range" value=10>
+        玩家速度:<span class="speed-span">10</span>
     </div>
+
+    <div>
+        <input class="auto-input" data-code="config.bullet_speed" type="range" value=20>
+        子弹速度:<span class="speed-span">20</span>
+    </div>
+
+    <div>
+        <input class="auto-input" data-code="config.enemy_speed" type="range" value=2>
+        敌机速度:<span class="speed-span">2</span>
+    </div>
+
+    <div>
+        <input class="auto-input" data-code="config.cloud_speed" type="range" value=5 max=10 min=-10>
+        云朵速度:<span class="speed-span">2</span>
+    </div>
+
+    <div>
+        <input class="auto-input" data-code="config.cooldown_time" type="range" value=10 min=0 max=20 >
+        子弹冷却:<span class="speed-span">10</span>
+    </div>
+
     <script>
         __main()
+    </script>
+    <script>
+        var es = sel => document.querySelectorAll(sel)
+
+        var bindAll = function (sel, eventName, callback) {
+            var elems = es(sel)
+
+            for (var i = 0; i < elems.length; i++) {
+                var e = elems[i]
+                e.addEventListener(eventName, function (event) {
+                    callback(event)
+                })
+            }
+        }
+
+        bindAll('.auto-input', 'input', function (event) {
+            var input = event.target
+            var v = input.value
+            var code = input.dataset.code
+            eval(code + '=' + v)
+            //
+            var span = input.closest('div').querySelector('.speed-span')
+            span.innerHTML = v
+        })
     </script>
 </body>
 </html>
