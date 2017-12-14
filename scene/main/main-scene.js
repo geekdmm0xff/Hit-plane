@@ -1,3 +1,79 @@
+//[start, end]
+const random = function (start, end) {
+    var n = Math.random() * (end - start + 1) + start
+    return Math.floor(n)
+}
+
+class Bullet extends GuaImage {
+    constructor(game, player) {
+        super('bullet', game)
+        this.player = player
+        this.setup()
+    }
+
+    setup() {
+        var p = this.player
+        this.x = p.x + p.w * 0.1
+        this.y = p.y
+        this.speed = 1
+    }
+
+    update() {
+        this.y -= this.speed
+        super.update()
+    }
+}
+
+class Enemy extends GuaImage {
+    constructor(game) {
+        var name = 'enemy' + String(random(0, 2))
+        super(name, game)
+        this.setup()
+    }
+    setup() {
+        this.x = random(0, 400)
+        this.y = -random(0, 250)
+        this.speed = 2
+    }
+
+    move() {
+        if (this.y > 400) {
+            this.setup()
+        }
+        this.y += this.speed
+    }
+
+    update() {
+        super.update()
+        this.move()
+    }
+}
+
+class Cloud extends GuaImage {
+    constructor(game) {
+        super('cloud', game)
+        this.setup()
+    }
+
+    setup() {
+        this.speed = 1
+        this.x = random(0, 100)
+        this.y = -random(0, 100)
+    }
+
+    move() {
+        if (this.y > 400) {
+            this.setup()
+        }
+        this.y += this.speed
+    }
+
+    update() {
+        this.move()
+        super.update()
+    }
+}
+
 class Player extends GuaImage {
     constructor(game) {
         super('player', game)
@@ -9,6 +85,11 @@ class Player extends GuaImage {
         this.x = 100
         this.y = 350
         this.speed = 10
+    }
+
+    fire() {
+        var b = new Bullet(this.game, this)
+        this.scene.addElemet(b)
     }
 
     moveUp() {
@@ -23,35 +104,42 @@ class Player extends GuaImage {
     moveRight() {
         this.x += this.speed
     }
+}
 
-    draw() {
-
+class Sky extends GuaImage {
+    constructor(game) {
+        super('sky', game)
+        this.setup()
     }
-
-    update() {
-
+    setup() {
+        this.w = 400
+        this.h = 400
     }
 }
 
 class Scene extends BaseScene {
-    constructor(game, blocks) {
+    constructor(game) {
         super(game)
         this.setup()
         this.setupEvents()
     }
 
     setup() {
-        this.sky = new GuaImage('sky', this.game)
-        this.sky.w = 400
-        this.sky.h = 400
+        this.numberOfEnemys = 10
+
+        this.sky = new Sky(this.game)
 
         this.player = new Player(this.game)
+        this.player.scene = this
 
-        this.cloud = new GuaImage('cloud', this.game)
+        this.cloud = new Cloud(this.game)
         this.cloud.w *= 0.5
         this.cloud.h *= 0.5
 
         this.addElemets([this.sky, this.player, this.cloud])
+        this.addElemets(this.addEnemys())
+
+        log('list:', this.elems)
     }
 
     setupEvents() {
@@ -68,10 +156,19 @@ class Scene extends BaseScene {
         game.registerAction('w', () => {
             this.player.moveUp()
         })
+        game.registerAction('f', () => {
+            this.player.fire()
+        })
     }
 
-    update() {
-        this.cloud.y += 1
+    addEnemys() {
+        var es = []
+        for (var i = 0; i < this.numberOfEnemys; i++) {
+            var e = new Enemy(this.game)
+            es.push(e)
+        }
+        this.enemys = es
+        return this.enemys
     }
 }
 /*

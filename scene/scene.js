@@ -6,11 +6,14 @@ class BaseScene {
     draw() {
         for (var i = 0; i < this.elems.length; i++) {
             var elem = this.elems[i]
-            this.game.drawImage(elem)
+             this.game.drawImage(elem)
         }
     }
     update() {
-
+        for (var i = 0; i < this.elems.length; i++) {
+            var elem = this.elems[i]
+            elem.update()
+        }
     }
 
     addElemet(elem) {
