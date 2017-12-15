@@ -36,6 +36,11 @@
         - 子弹冷却时间
         - debug 函数
         - 标题场景抽象
+        - 粒子系统(ParticleSystem)
+        - 小火花 (Particle)
+        - 火花控制
+        - 加速度
+        - 生命值, 为 0 移除重建
     </done>
 
     <other>
@@ -47,11 +52,17 @@
         update 时大于0, 每次减一即可。
         - 不要直接传一个callback, 而是开一个匿名函数, 在里面调用
         - closest 往上级找
+        - for...of...
+
+        - 如何在 particle system 中将火花画到scene?
+        - 如何不间断的爆炸?
+        - 小火花重建的时机?
     </other>
 
     <todo>
         - 从打砖块直接改编过来
-        - 粒子系统
+        - html 自动从配置文件构建
+            - 爆炸消失duration
     </todo>
 
 

@@ -11,6 +11,7 @@ var __main = function() {
         enemy0: 'img/enemy0.png',
         enemy1: 'img/enemy1.png',
         enemy2: 'img/enemy2.png',
+        fire: 'img/fire.png',
     }
 
     var game = Game.instance(30, paths, function () { // image 加载完回调
