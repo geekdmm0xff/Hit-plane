@@ -13,22 +13,23 @@ class TitleLabel {
 }
 
 class Particle extends GuaImage {
-    constructor(game) {
+    constructor(game, x, y) {
         super('fire', game)
-        this.init()
+        this.init(x, y)
         this.setup()
     }
 
-    init() {
-        this.x = 100
-        this.y = 100
-        this.w *= 0.2
-        this.h *= 0.2
-        this.vx = random(-10, 10)
-        this.vy = random(-10, 10)
+    init(x, y) {
+        this.x = x
+        this.y = y
     }
 
     setup() {
+        this.w *= 0.2
+        this.h *= 0.2
+        this.vx = random(-5, 5)
+        this.vy = random(-5, 5)
+
         this.life = 5
     }
 
@@ -38,9 +39,9 @@ class Particle extends GuaImage {
         this.x += this.vx
         this.y += this.vy
 
-        var delta = 0.1
-        this.vx += this.vx * delta
-        this.vy += this.vy * delta
+        var factor = 0.01
+        this.x += this.x * factor
+        this.y += this.x * factor
     }
 }
 
@@ -48,23 +49,17 @@ class ParticleSystem {
     constructor(game) {
         this.game = game
         this.particles = []
-        this.numberOfParticels = 100
-
-        this.setup()
-    }
-
-    setup() {
-        for (var i = 0; i < this.numberOfParticels; i++) {
-            this.addParticle()
-        }
+        this.numberOfParticels = 10
+        this.duration = 50
     }
 
     addParticle() {
-        var p = new Particle(this.game)
+        var p = new Particle(this.game, this.x, this.y)
         this.particles.push(p)
     }
 
     update() {
+        this.duration--
         if (this.particles.length < this.numberOfParticels) {
             this.addParticle()
         }
@@ -75,11 +70,12 @@ class ParticleSystem {
     }
 
     draw() {
+        if (this.duration <= 0) {
+            this.scene.removeElement(this)
+            return
+        }
         for (var p of this.particles) {
-            if (p.life > 0) {
-                p.draw()
-            }
-
+            p.draw()
         }
     }
 }
@@ -92,6 +88,8 @@ class SceneBegin extends BaseScene {
         this.addElemet(l)
 
         var ps = new ParticleSystem(game)
+        ps.x = 100
+        ps.y = 100
         this.addElemet(ps)
     }
 }

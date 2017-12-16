@@ -55,14 +55,14 @@
         - for...of...
 
         - 如何在 particle system 中将火花画到scene?
-        - 如何不间断的爆炸?
-        - 小火花重建的时机?
+        - 如何不间断的爆炸? filter 掉 lifet <= 0 的即可
+        - 小火花重建的时机? 不用初始化,每次 update 的时候检测添加即可
+        - 爆炸消失duration? 用于控制 ps 的显示
     </other>
 
     <todo>
         - 从打砖块直接改编过来
-        - html 自动从配置文件构建
-            - 爆炸消失duration
+
     </todo>
 
 
