@@ -15,8 +15,8 @@ var __main = function() {
     }
 
     var game = Game.instance(30, paths, function () { // image 加载完回调
-        // var scene = new Scene(game)
-        var scene = new SceneBegin(game)
+         var scene = new Scene(game)
+        // var scene = new SceneBegin(game)
         log(scene)
         game.runWithScene(scene)
     })
