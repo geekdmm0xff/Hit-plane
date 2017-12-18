@@ -1,4 +1,4 @@
-const kSkyKey = "sky"
+const kSkyKey = 'sky'
 const kCloudKey = 'cloud'
 const kPlayKey = 'player'
 const kEnemyKey = 'enemy'
@@ -10,58 +10,61 @@ class BaseScene {
         this.game = game
         this.debugMode = true
         this.elemsMap = {
-            kSkyKey: [],
-            kCloudKey: [],
-            kPlayKey: [],
-            kEnemyKey: [],
-            kPlayerBulletKey: [],
-            kEnemyBulletKey: [],
+            'sky': [],
+            'cloud': [],
+            'player': [],
+            'enemy': [],
+            'playerBullet': [],
+            'enemyBullet': [],
         }
     }
 
-    draw() {
+    /// Helper
+    forEachAll(callback) {
         var keys = Object.keys(this.elemsMap)
+        log('key', keys)
         for (var i = 0; i < keys.length; i++) {
             var k = keys[i]
-            var elem = this.elemsMap[k]
-            elem.draw()
+            var elems = this.elemsMap[k]
+            for (var e of elems) {
+                callback(e)
+            }
         }
+    }
+
+    //
+    draw() {
+        this.forEachAll(function (elem) {
+            elem.draw()
+        })
     }
 
     update() {
         this.debug()
 
-        for (var i = 0; i < this.elems.length; i++) {
-            var elem = this.elems[i]
+        this.forEachAll(function (elem) {
             elem.update()
-        }
+        })
     }
 
     debug(){
         if (!this.debugMode) {
             return
         }
-        for (var i = 0; i < this.elems.length; i++) {
-            var elem = this.elems[i]
+        this.forEachAll(function (elem) {
             elem.debug && elem.debug()
-        }
+        })
     }
 
-    addElemet(elem) {
+    addElemet(key, elem) {
         // bind scene
         elem.scene = this
-        this.elems.push(elem)
+        var elems = this.elemsMap[key]
+        elems.push(elem)
     }
 
-    addElemets(list) {
-        for (var i = 0; i < list.length; i++) {
-            var e = list[i]
-            this.addElemet(e)
-        }
-    }
-
-    removeElement(elem) {
-        var arr = this.elems
+    removeElement(key, elem) {
+        var arr = this.elemsMap[key]
         for (var i = 0; i < arr.length; i++) {
             if (arr[i] == elem) {
                 arr.splice(i, 1)

@@ -83,7 +83,7 @@ class Enemy extends GuaImage {
         b.x = this.x + 0.1 * this.w
         b.y = this.y
 
-        this.scene.addElemet(b)
+        this.scene.addElemet(kEnemyBulletKey, b)
     }
 
     debug() {
@@ -139,7 +139,7 @@ class Player extends GuaImage {
         if (this.cooldwon == 0) {
             this.cooldwon = config.cooldown_time
             var b = new Bullet(this.game, this, kPlayerBulletType)
-            this.scene.addElemet(b)
+            this.scene.addElemet(kPlayerBulletKey, b)
         }
     }
 
@@ -192,8 +192,11 @@ class Scene extends BaseScene {
         this.player = new Player(this.game)
         this.cloud = new Cloud(this.game)
 
-        this.addElemets([this.sky, this.player, this.cloud])
-        this.addElemets(this.addEnemys())
+        this.addElemet(kSkyKey, this.sky)
+        this.addElemet(kPlayKey, this.player)
+        this.addElemet(kCloudKey, this.cloud)
+
+        this.addEnemys()
     }
 
     setupEvents() {
@@ -220,9 +223,8 @@ class Scene extends BaseScene {
         for (var i = 0; i < this.numberOfEnemys; i++) {
             var e = new Enemy(this.game)
             es.push(e)
+            this.addElemet(kEnemyKey, e)
         }
-        this.enemys = es
-        return this.enemys
     }
 }
 /*
