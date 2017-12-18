@@ -43,4 +43,14 @@ class BaseScene {
             this.addElemet(e)
         }
     }
+
+    removeElement(elem) {
+        var arr = this.elems
+        for (var i = 0; i < arr.length; i++) {
+            if (arr[i] == elem) {
+                arr.splice(i, 1)
+                break
+            }
+        }
+    }
 }

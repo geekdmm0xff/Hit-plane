@@ -59,8 +59,16 @@ class Enemy extends GuaImage {
     }
 
     update() {
-        super.update()
         this.move()
+        this.fire()
+    }
+
+    fire() {
+        var b = new Bullet(this.game, this)
+        b.x = this.x
+        b.y = this.y
+
+        this.scene.addElemet(b)
     }
 
     debug() {
