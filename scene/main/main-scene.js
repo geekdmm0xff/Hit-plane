@@ -12,22 +12,32 @@ const random = function (start, end) {
     return Math.floor(n)
 }
 
+const kPlayerBulletType = "kPlayerBulletType"
+const kEnemyBulletType = "kEnemyBulletType"
+
 class Bullet extends GuaImage {
-    constructor(game, player) {
+    constructor(game, player, type) {
         super('bullet', game)
+
+        this.player = player
+        this.type = type
+
         this.setup(player)
     }
 
     setup(player) {
-        this.player = player
         this.x = player.x + player.w * 0.1
         this.y = player.y
-        this.player = player
         this.speed = config.bullet_speed
     }
 
     move() {
-        this.y -= this.speed
+        if (this.type === kPlayerBulletType) {
+            this.y -= this.speed
+        } else {
+            this.y += this.speed
+        }
+
     }
 
     update() {
@@ -49,6 +59,7 @@ class Enemy extends GuaImage {
         this.x = random(0, 400)
         this.y = -random(0, 250)
         this.speed = config.enemy_speed
+        this.cooldown = 0
     }
 
     move() {
@@ -60,12 +71,16 @@ class Enemy extends GuaImage {
 
     update() {
         this.move()
-        this.fire()
+        this.cooldown--
+        if (this.cooldown <= 0) {
+            this.cooldown = random(20, 40)
+            this.fire()
+        }
     }
 
     fire() {
-        var b = new Bullet(this.game, this)
-        b.x = this.x
+        var b = new Bullet(this.game, this, kEnemyBulletType)
+        b.x = this.x + 0.1 * this.w
         b.y = this.y
 
         this.scene.addElemet(b)
@@ -123,7 +138,7 @@ class Player extends GuaImage {
     fire() {
         if (this.cooldwon == 0) {
             this.cooldwon = config.cooldown_time
-            var b = new Bullet(this.game, this)
+            var b = new Bullet(this.game, this, kPlayerBulletType)
             this.scene.addElemet(b)
         }
     }

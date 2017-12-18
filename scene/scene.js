@@ -1,13 +1,29 @@
+const kSkyKey = "sky"
+const kCloudKey = 'cloud'
+const kPlayKey = 'player'
+const kEnemyKey = 'enemy'
+const kPlayerBulletKey = 'playerBullet'
+const kEnemyBulletKey = 'enemyBullet'
+
 class BaseScene {
     constructor(game) {
         this.game = game
         this.debugMode = true
-        this.elems = []
+        this.elemsMap = {
+            kSkyKey: [],
+            kCloudKey: [],
+            kPlayKey: [],
+            kEnemyKey: [],
+            kPlayerBulletKey: [],
+            kEnemyBulletKey: [],
+        }
     }
 
     draw() {
-        for (var i = 0; i < this.elems.length; i++) {
-            var elem = this.elems[i]
+        var keys = Object.keys(this.elemsMap)
+        for (var i = 0; i < keys.length; i++) {
+            var k = keys[i]
+            var elem = this.elemsMap[k]
             elem.draw()
         }
     }
