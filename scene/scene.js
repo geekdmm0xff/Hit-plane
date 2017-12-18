@@ -4,6 +4,7 @@ const kPlayKey = 'player'
 const kEnemyKey = 'enemy'
 const kPlayerBulletKey = 'playerBullet'
 const kEnemyBulletKey = 'enemyBullet'
+const kPartcleSystemKey = 'partcleSystem'
 
 class BaseScene {
     constructor(game) {
@@ -16,19 +17,7 @@ class BaseScene {
             'enemy': [],
             'playerBullet': [],
             'enemyBullet': [],
-        }
-    }
-
-    /// Helper
-    forEachAll(callback) {
-        var keys = Object.keys(this.elemsMap)
-        log('key', keys)
-        for (var i = 0; i < keys.length; i++) {
-            var k = keys[i]
-            var elems = this.elemsMap[k]
-            for (var e of elems) {
-                callback(e)
-            }
+            'partcleSystem': [],
         }
     }
 
@@ -56,9 +45,22 @@ class BaseScene {
         })
     }
 
+    /// Helper
+    forEachAll(callback) {
+        var keys = Object.keys(this.elemsMap)
+        for (var i = 0; i < keys.length; i++) {
+            var k = keys[i]
+            var elems = this.elemsMap[k]
+            for (var e of elems) {
+                callback(e)
+            }
+        }
+    }
+
     addElemet(key, elem) {
         // bind scene
         elem.scene = this
+
         var elems = this.elemsMap[key]
         elems.push(elem)
     }
@@ -71,5 +73,9 @@ class BaseScene {
                 break
             }
         }
+    }
+
+    getElements(key) {
+        return this.elemsMap[key]
     }
 }

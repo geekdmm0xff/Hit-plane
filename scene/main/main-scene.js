@@ -34,10 +34,27 @@ class Bullet extends GuaImage {
     move() {
         if (this.type === kPlayerBulletType) {
             this.y -= this.speed
+            this.collideEnemy()
         } else {
             this.y += this.speed
         }
 
+    }
+
+    // 自己的子弹和敌方飞机相撞
+    collideEnemy() {
+        var s = this.scene;
+        var enemys = s.getElements(kEnemyKey)
+        for (var e of enemys) {
+            if (hitRect(e, this)) {
+                //
+                e.kill()
+                //
+                var ps = new ParticleSystem(this.game)
+                ps.init(this.x, this.y)
+                s.addElemet(kPartcleSystemKey, ps)
+            }
+        }
     }
 
     update() {
@@ -84,6 +101,10 @@ class Enemy extends GuaImage {
         b.y = this.y
 
         this.scene.addElemet(kEnemyBulletKey, b)
+    }
+
+    kill() {
+        this.scene.removeElement(kEnemyKey, this)
     }
 
     debug() {
@@ -160,6 +181,7 @@ class Player extends GuaImage {
         if (this.cooldwon > 0) {
             this.cooldwon--;
         }
+
     }
 
     debug() {

@@ -35,9 +35,12 @@ class ParticleSystem {
         this.game = game
         this.particles = []
         this.numberOfParticels = 10
-        this.duration = 50
-        this.x = 100
-        this.y = 100
+        this.duration = 20
+    }
+
+    init(x, y) {
+        this.x = x
+        this.y = y
     }
 
     addParticle() {
@@ -59,7 +62,7 @@ class ParticleSystem {
 
     draw() {
         if (this.duration <= 0) {
-            this.scene.removeElement(this)
+            this.scene.removeElement(kPartcleSystemKey, this)
             return
         }
         for (var p of this.particles) {
