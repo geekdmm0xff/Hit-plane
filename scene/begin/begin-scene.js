@@ -17,9 +17,9 @@ class SceneBegin extends BaseScene {
         super(game)
         // event
         var l = new TitleLabel(game, '粒子系统')
-        this.addElemet(l)
+        this.addElemet(kPartcleSystemKey, l)
 
-        var ps = new ParticleSystem(game)
+        var ps = new ParticleSystem(kPartcleSystemKey, game)
         this.addElemet(ps)
     }
 }

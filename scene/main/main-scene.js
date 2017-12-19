@@ -38,6 +38,7 @@ class Bullet extends GuaImage {
             this.collideEnemy()
         } else {
             this.y += this.speed
+            this.collidePlayer()
         }
 
     }
@@ -64,9 +65,24 @@ class Bullet extends GuaImage {
         var bullets = s.getElements(kEnemyBulletKey)
         for (var b of bullets) {
             if (hitRect(this, b)) {
-                log('will kill')
                 this.kill(kPlayerBulletKey)
                 b.kill(kEnemyBulletKey)
+            }
+        }
+    }
+
+    // 敌人的子弹打中玩家
+    collidePlayer() {
+        var s = this.scene;
+        var players = s.getElements(kPlayKey)
+        for (var e of players) {
+            if (hitRect(e, this)) {
+                //
+                e.kill()
+                //
+                var ps = new ParticleSystem(this.game)
+                ps.init(this.x, this.y)
+                s.addElemet(kPartcleSystemKey, ps)
             }
         }
     }
@@ -79,13 +95,8 @@ class Bullet extends GuaImage {
         this.speed = config.bullet_speed
     }
 
-    kill(type) {
-        if (type === kPlayerBulletType) {
-            this.scene.removeElement(kEnemyBulletKey, this)
-        } else {
-            this.scene.removeElement(kPlayerBulletKey, this)
-        }
-
+    kill(key) {
+        this.scene.removeElement(key, this)
     }
 }
 
@@ -113,7 +124,7 @@ class Enemy extends GuaImage {
         this.move()
         this.cooldown--
         if (this.cooldown <= 0) {
-            this.cooldown = 10
+            this.cooldown = config.cooldown_time
             this.fire()
         }
     }
@@ -177,6 +188,7 @@ class Player extends GuaImage {
         this.y = 350
         this.speed = config.player_speed
         this.cooldwon = 0
+        this.life = 1000
     }
 
     fire() {
@@ -209,6 +221,19 @@ class Player extends GuaImage {
 
     debug() {
         this.speed = config.player_speed
+    }
+
+    kill() {
+        this.life--
+        if (this.life <= 0) {
+            this.destory()
+        }
+    }
+    destory() {
+        this.scene.removeElement(kPlayKey, this)
+
+        var s = new GameOverScene(this.game)
+        this.game.replaceScene(s)
     }
 }
 

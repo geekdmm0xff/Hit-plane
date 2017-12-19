@@ -3,7 +3,7 @@ class GameOverScene extends BaseScene {
         super(game)
         // event
         game.registerAction('k', function () {
-            var s = new SceneBegin(game)
+            var s = new Scene(game)
             game.replaceScene(s)
         })
     }
