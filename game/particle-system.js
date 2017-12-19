@@ -62,7 +62,7 @@ class ParticleSystem {
 
     draw() {
         if (this.duration <= 0) {
-            this.scene.removeElement(kPartcleSystemKey, this)
+            this.scene.removeElement(this)
             return
         }
         for (var p of this.particles) {

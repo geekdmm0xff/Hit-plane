@@ -1,5 +1,3 @@
-const kPlayerBulletType = "kPlayerBulletType"
-const kEnemyBulletType = "kEnemyBulletType"
 
 //[start, end]
 var config = {
@@ -16,11 +14,9 @@ const random = function (start, end) {
 }
 
 class Bullet extends GuaImage {
-    constructor(game, player, type) {
+    constructor(game, player) {
         super('bullet', game)
-
         this.player = player
-        this.type = type
 
         this.setup(player)
     }
@@ -32,7 +28,7 @@ class Bullet extends GuaImage {
     }
 
     move() {
-        if (this.type === kPlayerBulletType) {
+        if (this.type === kPlayerBulletKey) {
             this.y -= this.speed
             this.collideEnemyBullet()
             this.collideEnemy()
@@ -53,8 +49,9 @@ class Bullet extends GuaImage {
                 e.kill()
                 //
                 var ps = new ParticleSystem(this.game)
+                ps.type = kPartcleSystemKey
                 ps.init(this.x, this.y)
-                s.addElemet(kPartcleSystemKey, ps)
+                s.addElemet(ps)
             }
         }
     }
@@ -79,10 +76,14 @@ class Bullet extends GuaImage {
             if (hitRect(e, this)) {
                 //
                 e.kill()
-                //
-                var ps = new ParticleSystem(this.game)
-                ps.init(this.x, this.y)
-                s.addElemet(kPartcleSystemKey, ps)
+
+                if (e.life <= 0) {
+                    var ps = new ParticleSystem(this.game)
+                    ps.type = kPartcleSystemKey
+                    ps.init(this.x, this.y)
+                    s.addElemet(ps)
+                }
+
             }
         }
     }
@@ -95,8 +96,8 @@ class Bullet extends GuaImage {
         this.speed = config.bullet_speed
     }
 
-    kill(key) {
-        this.scene.removeElement(key, this)
+    kill() {
+        this.scene.removeElement(this)
     }
 }
 
@@ -130,15 +131,16 @@ class Enemy extends GuaImage {
     }
 
     fire() {
-        var b = new Bullet(this.game, this, kEnemyBulletType)
+        var b = new Bullet(this.game, this)
+        b.type = kEnemyBulletKey
         b.x = this.x + 0.1 * this.w
         b.y = this.y
 
-        this.scene.addElemet(kEnemyBulletKey, b)
+        this.scene.addElemet(b)
     }
 
     kill() {
-        this.scene.removeElement(kEnemyKey, this)
+        this.scene.removeElement(this)
     }
 
     debug() {
@@ -194,8 +196,9 @@ class Player extends GuaImage {
     fire() {
         if (this.cooldwon == 0) {
             this.cooldwon = config.cooldown_time
-            var b = new Bullet(this.game, this, kPlayerBulletType)
-            this.scene.addElemet(kPlayerBulletKey, b)
+            var b = new Bullet(this.game, this)
+            b.type = kPlayerBulletKey
+            this.scene.addElemet(b)
         }
     }
 
@@ -230,7 +233,7 @@ class Player extends GuaImage {
         }
     }
     destory() {
-        this.scene.removeElement(kPlayKey, this)
+        this.scene.removeElement(this)
 
         var s = new GameOverScene(this.game)
         this.game.replaceScene(s)
@@ -262,9 +265,9 @@ class Scene extends BaseScene {
         this.player = new Player(this.game)
         this.cloud = new Cloud(this.game)
 
-        this.addElemet(kSkyKey, this.sky)
-        this.addElemet(kPlayKey, this.player)
-        this.addElemet(kCloudKey, this.cloud)
+        this.addElemet(this.sky)
+        this.addElemet(this.player)
+        this.addElemet(this.cloud)
 
         this.addEnemys()
     }
@@ -292,8 +295,9 @@ class Scene extends BaseScene {
         var es = []
         for (var i = 0; i < this.numberOfEnemys; i++) {
             var e = new Enemy(this.game)
+            e.type = 'enemy'
             es.push(e)
-            this.addElemet(kEnemyKey, e)
+            this.addElemet(e)
         }
     }
 }

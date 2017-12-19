@@ -5,6 +5,7 @@ const kEnemyKey = 'enemy'
 const kPlayerBulletKey = 'playerBullet'
 const kEnemyBulletKey = 'enemyBullet'
 const kPartcleSystemKey = 'partcleSystem'
+const kLabel = 'label'
 
 class BaseScene {
     constructor(game) {
@@ -18,6 +19,7 @@ class BaseScene {
             'playerBullet': [],
             'enemyBullet': [],
             'partcleSystem': [],
+            'label': [],
         }
     }
 
@@ -57,17 +59,16 @@ class BaseScene {
         }
     }
 
-    addElemet(key, elem) {
+    addElemet(elem) {
         // bind scene
         elem.scene = this
 
-        var elems = this.elemsMap[key]
+        var elems = this.elemsMap[elem.type]
         elems.push(elem)
     }
 
-    removeElement(key, elem) {
-        var arr = this.elemsMap[key]
-        log(arr)
+    removeElement(elem) {
+        var arr = this.elemsMap[elem.type]
         for (var i = 0; i < arr.length; i++) {
             if (arr[i] == elem) {
                 log('remove elem', elem)
@@ -77,7 +78,7 @@ class BaseScene {
         }
     }
 
-    getElements(key) {
-        return this.elemsMap[key]
+    getElements(type) {
+        return this.elemsMap[type]
     }
 }
