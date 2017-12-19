@@ -35,6 +35,7 @@ class Bullet extends GuaImage {
         if (this.type === kPlayerBulletType) {
             this.y -= this.speed
             this.collideEnemy()
+            this.collideEnemyBullet()
         } else {
             this.y += this.speed
         }
@@ -57,12 +58,30 @@ class Bullet extends GuaImage {
         }
     }
 
+    // 自己的子弹和敌人的子弹相撞
+    collideEnemyBullet() {
+        var s = this.scene;
+        var bullets = s.getElements(kEnemyBulletKey)
+        for (var b of bullets) {
+            if (hitRect(b, this)) {
+                //
+                b.kill()
+                this.kill()
+            }
+        }
+    }
+
     update() {
         this.move()
     }
 
     debug() {
         this.speed = config.bullet_speed
+    }
+
+    kill() {
+        log('bullet will remove')
+        this.scene.removeElement(kEnemyBulletKey, this)
     }
 }
 
@@ -90,7 +109,7 @@ class Enemy extends GuaImage {
         this.move()
         this.cooldown--
         if (this.cooldown <= 0) {
-            this.cooldown = random(20, 40)
+            this.cooldown = 10
             this.fire()
         }
     }
