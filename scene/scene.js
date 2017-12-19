@@ -67,8 +67,10 @@ class BaseScene {
 
     removeElement(key, elem) {
         var arr = this.elemsMap[key]
+        log(arr)
         for (var i = 0; i < arr.length; i++) {
             if (arr[i] == elem) {
+                log('remove elem', elem)
                 arr.splice(i, 1)
                 break
             }

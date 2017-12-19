@@ -1,3 +1,6 @@
+const kPlayerBulletType = "kPlayerBulletType"
+const kEnemyBulletType = "kEnemyBulletType"
+
 //[start, end]
 var config = {
     player_speed: 10,
@@ -11,9 +14,6 @@ const random = function (start, end) {
     var n = Math.random() * (end - start + 1) + start
     return Math.floor(n)
 }
-
-const kPlayerBulletType = "kPlayerBulletType"
-const kEnemyBulletType = "kEnemyBulletType"
 
 class Bullet extends GuaImage {
     constructor(game, player, type) {
@@ -34,8 +34,8 @@ class Bullet extends GuaImage {
     move() {
         if (this.type === kPlayerBulletType) {
             this.y -= this.speed
-            this.collideEnemy()
             this.collideEnemyBullet()
+            this.collideEnemy()
         } else {
             this.y += this.speed
         }
@@ -63,10 +63,10 @@ class Bullet extends GuaImage {
         var s = this.scene;
         var bullets = s.getElements(kEnemyBulletKey)
         for (var b of bullets) {
-            if (hitRect(b, this)) {
-                //
-                b.kill()
-                this.kill()
+            if (hitRect(this, b)) {
+                log('will kill')
+                this.kill(kPlayerBulletKey)
+                b.kill(kEnemyBulletKey)
             }
         }
     }
@@ -79,9 +79,13 @@ class Bullet extends GuaImage {
         this.speed = config.bullet_speed
     }
 
-    kill() {
-        log('bullet will remove')
-        this.scene.removeElement(kEnemyBulletKey, this)
+    kill(type) {
+        if (type === kPlayerBulletType) {
+            this.scene.removeElement(kEnemyBulletKey, this)
+        } else {
+            this.scene.removeElement(kPlayerBulletKey, this)
+        }
+
     }
 }
 
