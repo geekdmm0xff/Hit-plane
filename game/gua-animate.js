@@ -2,33 +2,36 @@ class GuaAnimate {
     constructor(game) {
         this.game = game
 
-
         // loads
-        this.images = []
+        this.frames = []
         for (var i = 1; i < 9; i++) {
-            var name = `w${i}`
-            var img = new GuaImage(name, game)
-            img.x = 100
-            img.y = 100
-            this.images.push(img)
+            var name =
+            var f = game.textureByName(name)
+            this.frames.push(f)
         }
 
-        this.texture = this.images[0]
-        this.imageInterval = 0
-        this.index = 0
+        this.texture = this.frames[0]
+        this.frameInterval = 3
+        this.frameIndex = 0
+
+        this.w = this.texture.width
+        this.h = this.texture.height
     }
 
     update() {
-        if (this.imageInterval == 0) {
-            this.imageInterval = 5
-            this.index = (this.index + 1) % this.images.length
-            this.texture = this.images[this.index]
-        } else {
-            this.imageInterval--
+        this.frameInterval--
+        if (this.frameInterval == 0) {
+            this.frameInterval = 3
+            this.frameIndex = (this.frameIndex + 1) % this.frames.length
+            this.texture = this.frames[this.frameIndex]
         }
     }
 
     draw() {
-        this.texture.draw()
+        this.game.drawImage(this)
+    }
+
+    move(x) {
+        this.x += x
     }
 }
