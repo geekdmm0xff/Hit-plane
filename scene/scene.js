@@ -6,6 +6,7 @@ const kPlayerBulletKey = 'playerBullet'
 const kEnemyBulletKey = 'enemyBullet'
 const kPartcleSystemKey = 'partcleSystem'
 const kLabel = 'label'
+const kAnimate = 'animate'
 
 class BaseScene {
     constructor(game) {
@@ -20,6 +21,7 @@ class BaseScene {
             'enemyBullet': [],
             'partcleSystem': [],
             'label': [],
+            'animate': [],
         }
     }
 
