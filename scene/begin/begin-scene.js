@@ -12,11 +12,11 @@ class BeginScene extends BaseScene {
     }
 
     setupInputs() {
-        this.game.registerAction('a', ()=>{
-            this.w.move(-5)
+        this.game.registerAction('a', (state)=>{
+            this.w.move(state, -5)
         })
-        this.game.registerAction('d', ()=>{
-            this.w.move(5)
+        this.game.registerAction('d', (state)=>{
+            this.w.move(state, 5)
         })
     }
 }

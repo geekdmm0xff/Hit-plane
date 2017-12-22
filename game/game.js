@@ -1,3 +1,6 @@
+const kDownKeyState = 'down'
+const kUpKeyState = 'up'
+
 class Game {
     static instance(...args) {
         this.game = this.game || new this(...args)
@@ -25,10 +28,10 @@ class Game {
 
         // keyboard
         window.addEventListener('keydown', event => {
-            this.keydowns[event.key] = true
+            this.keydowns[event.key] = kDownKeyState
         })
         window.addEventListener('keyup', event => {
-            this.keydowns[event.key] = false
+            this.keydowns[event.key] = kUpKeyState
         })
     }
 
@@ -106,8 +109,13 @@ class Game {
         for (var i = 0; i < actions.length; i++) {
             var key = actions[i]
             var callback = this.actions[key]
-            if (this.keydowns[key] && typeof callback == "function" ) { // tap -> run
-                callback()
+            var state = this.keydowns[key]
+            if (state == kDownKeyState) { // tap -> run
+                callback && callback(kDownKeyState)
+                log(kDownKeyState)
+            } else if (state == kUpKeyState) {
+                callback && callback(kUpKeyState)
+                this.keydowns[key] = null
             }
         }
         //
