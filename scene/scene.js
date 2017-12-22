@@ -22,6 +22,7 @@ class BaseScene {
             'partcleSystem': [],
             'label': [],
             'animate': [],
+            'background': [],
         }
     }
 
@@ -66,7 +67,9 @@ class BaseScene {
         elem.scene = this
 
         var elems = this.elemsMap[elem.type]
+        log(elems)
         elems.push(elem)
+        log(elems)
     }
 
     removeElement(elem) {

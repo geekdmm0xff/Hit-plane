@@ -50,6 +50,8 @@ var __main = function() {
         s14: 'img/idle/Idle (14).png',
         s15: 'img/idle/Idle (15).png',
         s16: 'img/idle/Idle (16).png',
+        // background
+        background: 'img/background.png',
     }
 
     var game = Game.instance(30, paths, function () { // image 加载完回调

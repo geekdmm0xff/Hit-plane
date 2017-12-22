@@ -25,8 +25,10 @@ class GuaAnimate {
         this.frameInterval = 3
         this.frameIndex = 0
 
-        this.w = this.texture.width * 0.2
-        this.h = this.texture.height * 0.2
+        this.w = this.texture.width * 0.1
+        this.h = this.texture.height * 0.1
+
+        this.flipX = false
     }
 
     frames() {
@@ -44,15 +46,37 @@ class GuaAnimate {
     }
 
     draw() {
-        this.game.drawImage(this)
+        if (this.flipX) {
+            var ctx = this.game.context
+            ctx.save()
+
+            var x = this.x + this.w / 2
+            ctx.translate(x, 0)
+            ctx.scale(-1, 1)
+            ctx.translate(-x, 0)
+
+            ctx.drawImage(this.texture, this.x, this.y, this.w, this.h)
+
+            ctx.restore()
+        } else {
+            this.game.drawImage(this)
+        }
+    }
+
+    changeAnimate(name) {
+        this.animationName = name
     }
 
     move(state, x) {
-        var map = {
+        this.flipX = x < 0
+
+        this.x += x
+
+        var animationNames = {
             'down': 'walk',
             'up': 'idle',
         }
-        this.animationName = map[state]
-        this.x += x
+        var name = animationNames[state]
+        this.changeAnimate(name)
     }
 }
