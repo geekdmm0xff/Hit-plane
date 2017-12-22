@@ -5,7 +5,7 @@ class GuaAnimate {
         // loads
         this.frames = []
         for (var i = 1; i < 9; i++) {
-            var name =
+            var name = `w${i}`
             var f = game.textureByName(name)
             this.frames.push(f)
         }
